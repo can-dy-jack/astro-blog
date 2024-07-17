@@ -1,0 +1,36 @@
+---
+const { content, url } = Astro.props;
+---
+
+<span class="tooltip">
+  <span class="text" data-url={url}>{content}</span>
+  <span class="info"><slot /></span>
+</span>
+<style>
+  .tooltip {
+    position: relative;
+    margin-right: 5px;
+  }
+  .info {
+    opacity: 0;
+    transition: all 200ms;
+  }
+</style>
+<script>
+  const texts = document.getElementsByClassName("text");
+  const infos = document.getElementsByClassName("info");
+
+  for (let i = 0; i < texts.length; i++) {
+    let info: HTMLElement = infos[i] as HTMLElement;
+    let text: HTMLElement = texts[i] as HTMLElement;
+    text.addEventListener('mouseenter', e => {
+      info.style.opacity = "1";
+    })
+    text.addEventListener('click', e => {
+      window.open(text.dataset.url);
+    })
+    text.addEventListener('mouseleave', e => {
+      info.style.opacity = "0";
+    })
+  }
+</script>

@@ -1,85 +1,150 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import Tooltips from "../components/tooltips/Tooltips.astro";
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  tags,
+  themeColor,
+  themeColorBg,
+  reprinted,
+  reprintedUrl,
+} = Astro.props;
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style define:vars={{ theme: themeColor, "theme-bg": themeColorBg }}>
+      main {
+        width: calc(100% - 2em);
+        max-width: 100%;
+        margin: 0;
+      }
+      .hero-image {
+        width: 100%;
+      }
+      .hero-image img {
+        display: block;
+        margin: 0 auto;
+        border-radius: 12px;
+        box-shadow: var(--box-shadow);
+      }
+      .prose {
+        width: 720px;
+        max-width: calc(100% - 2em);
+        margin: auto;
+        padding: 1em;
+        color: rgb(var(--gray-dark));
+      }
+      .title {
+        margin-bottom: 1em;
+        padding: 1em 0;
+        text-align: center;
+        line-height: 1;
+      }
+      .title h1 {
+        margin: 0 0 0.5em 0;
+      }
+      .date {
+        margin-bottom: 0.5em;
+        color: rgb(var(--gray));
+		line-height: 1.2;
+      }
+      .last-updated-on {
+        font-style: italic;
+      }
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+      .tags {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        transition: all ease 250ms;
+      }
+      .tags .tag {
+        cursor: pointer;
+        transition: all ease 250ms;
+        color: gray;
+      }
+      .tags .tag:hover {
+        color: var(--theme);
+        font-weight: bold;
+      }
+      .reprinted {
+        font-size: 0.9rem;
+        color: gray;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #eee;
+        margin: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <Header />
+    <main>
+      <article>
+        <div class="hero-image">
+          {
+            heroImage && (
+              <img width={1020} height={510} src={heroImage} alt="" />
+            )
+          }
+        </div>
+        <div class="prose">
+          <div class="title">
+            <h1>
+              {title}{
+                reprinted ? (
+                  <sup id="reprinted" class="reprinted">
+                    <Tooltips content="转载" url={reprintedUrl}>
+                      <div class="tooltip-info">
+                        <a href={reprintedUrl} target="_blank">
+                          {reprintedUrl}
+                        </a>
+                      </div>
+                    </Tooltips>
+                  </sup>
+                ) : (
+                  ""
+                )
+              }
+            </h1>
+
+            <div class="date">
+              <div>创建于：<FormattedDate date={pubDate} /></div>
+              {
+                updatedDate && (
+                  <div class="last-updated-on">
+                    最近更新： <FormattedDate date={updatedDate} />
+                  </div>
+                )
+              }
+            </div>
+
+            <div class="tags">
+              {tags && tags.map((tag) => <span class="tag">#{tag} </span>)}
+            </div>
+
+            <hr />
+          </div>
+          <slot />
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
 </html>
