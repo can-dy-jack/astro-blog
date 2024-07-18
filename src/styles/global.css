@@ -18,6 +18,15 @@
   --theme: #3190f0;
   --theme-bg: rgb(49, 144, 240, 0.1);
 }
+
+html.dark {
+  background-color: #1c1c1c;
+  color: #fff;
+}
+.dark .nav-links a {
+  color: #fff;
+}
+
 @font-face {
   font-family: "Atkinson";
   src: url("/fonts/atkinson-regular.woff") format("woff");

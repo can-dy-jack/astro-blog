@@ -1,20 +1,71 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { type CollectionEntry, getCollection } from "astro:content";
+import BlogPost from "../../layouts/BlogPost.astro";
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'blog'>;
+  const posts = (await getCollection("blog")).sort(
+    (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+  );
+  const n = posts.length;
+  const ans: object[] = [];
+  for (let i = 0; i < n; i++) {
+    ans.push({
+      params: { slug: posts[i].slug },
+      props: {
+        post: posts[i],
+        prev: i === 0 ? null : posts[i - 1],
+        next: i < n - 1 ? posts[i + 1] : null,
+      },
+    });
+  }
 
-const post = Astro.props;
+  return ans;
+}
+type Props = CollectionEntry<"blog">;
+
+type DataType = { post: Props; next: Props; prev: Props };
+
+const { post, next, prev } = Astro.props as DataType;
+
 const { Content } = await post.render();
 ---
 
 <BlogPost {...post.data}>
-	<Content />
+  <div>
+    <Content />
+
+	<hr>
+
+    <div class="next-prev">
+      <div class="prev">
+        {
+          prev && (
+            <span>
+              上一篇：<a href={`/blog/${prev.slug}`}>{prev.data.title}</a>
+            </span>
+          )
+        }
+      </div>
+      <div class="next">
+        {
+          next && (
+            <span>
+              下一篇：<a href={`/blog/${next.slug}`}>{next.data.title}</a>
+            </span>
+          )
+        }
+      </div>
+    </div>
+  </div>
 </BlogPost>
+
+<style>
+  .next-prev {
+	margin: 20px 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+  }
+</style>
