@@ -2,6 +2,8 @@
 :root {
   --theme: #ff9fa4;
   --gray: 96, 115, 159;
+  --bg: #fff;
+  --color: #233;
 
   --accent: #2337ff;
   --accent-dark: #000d8a;
@@ -15,10 +17,18 @@
   /* --theme: #3190f0; */
   --theme-bg: rgb(49, 144, 240, 0.1);
 }
-html.dark {
-  background-color: rgb(14, 28, 28);
-  color: #fff;
+html {
+  background-color: var(--bg);
+  color: var(--color);
+  color-scheme: light;
 }
+html.dark {
+  --bg: rgb(14, 28, 28);
+  --color: #eee;
+  color-scheme: dark;
+  --gray-light: 128, 128, 128;
+}
+
 ::view-transition-new(root),
 ::view-transition-old(root) {
   /* 关闭默认动画，否则影响自定义动画的执行 */
@@ -30,7 +40,7 @@ html.dark {
 /* .dark::view-transition-new(root) {
   z-index: 100;
 } */
- 
+
 /* common */
 .flex {
   display: flex;
@@ -41,8 +51,6 @@ html.dark {
   flex: 1;
 }
 /* common */
-
-
 
 @font-face {
   font-family: "Atkinson";
@@ -67,18 +75,21 @@ body {
   background-size: 100% 600px;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  color: rgb(var(--gray-dark));
+  color: var(--color);
   font-size: 16px;
   line-height: 1.7;
 }
 ::selection {
   background-color: var(--theme);
 }
+
 main {
   width: 720px;
   max-width: calc(100% - 2em);
   margin: auto;
   padding: 3em 1em;
+
+  margin-top: 70px;
 }
 h1,
 h2,
@@ -87,7 +98,7 @@ h4,
 h5,
 h6 {
   margin: 0 0 0.5rem 0;
-  color: rgb(var(--black));
+  color: var(--color);
   line-height: 1.2;
 }
 h1 {
@@ -110,10 +121,10 @@ b {
   font-weight: 700;
 }
 a {
-  color: var(--accent);
+  color: var(--theme);
 }
 a:hover {
-  color: var(--accent);
+  color: var(--theme);
 }
 p {
   margin-bottom: 1em;

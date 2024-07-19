@@ -103,7 +103,6 @@
   }
 </style>
 <script is:inline>
-  // themeIcon
   let theme = (() => {
     if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
       return localStorage.getItem("theme");
@@ -157,7 +156,16 @@
     });
   };
 
-  const toggles = document.getElementsByClassName("themeToggle");
+  let toggles = [];
+</script>
+<script is:inline data-astro-rerun>
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+
+  toggles = document.getElementsByClassName("themeToggle");
   for (let toggle of toggles) {
     toggle.addEventListener("click", handleToggleClick);
   }

@@ -1,5 +1,4 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
 import Badge from "./Badge.astro";
 import { SITE_TITLE } from "../consts";
 ---
@@ -72,6 +71,14 @@ import { SITE_TITLE } from "../consts";
   </nav>
 </header>
 <style>
+  header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 0;
+    z-index: 20;
+    background-color: var(--bg);
+  }
   header nav {
     display: flex;
     align-items: center;
@@ -79,7 +86,7 @@ import { SITE_TITLE } from "../consts";
     margin: 0 auto;
     justify-content: space-between;
     gap: 20px;
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
     box-sizing: border-box;
   }
   header h2 a {

@@ -15,9 +15,9 @@ const desStr = des ? SITE_DESCRIPTION + " | " + des : SITE_DESCRIPTION;
   <head>
     <BaseHead title={titleStr} description={desStr} />
     <style>
-      main {
+      /* main {
         width: 960px;
-      }
+      } */
       ul {
         display: flex;
         flex-wrap: wrap;
@@ -53,16 +53,16 @@ const desStr = des ? SITE_DESCRIPTION + " | " + des : SITE_DESCRIPTION;
       }
       .title {
         margin: 0;
-        color: rgb(var(--black));
+        color: var(--color);
         line-height: 1;
       }
       .date {
         margin: 0;
-        color: rgb(var(--gray));
+        color: var(--color);
       }
       ul li a:hover h4,
       ul li a:hover .date {
-        color: rgb(var(--accent));
+        color: rgb(var(--theme));
       }
       ul a:hover img {
         box-shadow: var(--box-shadow);
@@ -87,6 +87,7 @@ const desStr = des ? SITE_DESCRIPTION + " | " + des : SITE_DESCRIPTION;
   </head>
   <body>
     <Header />
+	
     <main>
       <slot />
     </main>

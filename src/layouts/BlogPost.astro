@@ -27,11 +27,11 @@ const {
   <head>
     <BaseHead title={title} description={description} />
     <style define:vars={{ theme: themeColor, "theme-bg": themeColorBg }}>
-      main {
+      /* main {
         width: calc(100% - 2em);
         max-width: 100%;
         margin: 0;
-      }
+      } */
       .hero-image {
         width: 100%;
       }
@@ -46,7 +46,7 @@ const {
         max-width: calc(100% - 2em);
         margin: auto;
         padding: 1em;
-        color: rgb(var(--gray-dark));
+        color: var(--color);
       }
       .title {
         margin-bottom: 1em;
