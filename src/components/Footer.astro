@@ -10,8 +10,13 @@ const today = new Date();
 <style>
 	footer {
 		padding: 2em 1em 6em 1em;
-		background: var(--bg);
+		background: #eee;
 		color: var(--color);
 		text-align: center;
+		border-top: 1px solid #eee;
+	}
+	:global(.dark) footer {
+		background-color: #555;
+		border-top: 1px solid #888;
 	}
 </style>

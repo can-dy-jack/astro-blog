@@ -41,13 +41,6 @@ const {
         border-radius: 12px;
         box-shadow: var(--box-shadow);
       }
-      .prose {
-        width: 720px;
-        max-width: calc(100% - 2em);
-        margin: auto;
-        padding: 1em;
-        color: var(--color);
-      }
       .title {
         margin-bottom: 1em;
         padding: 1em 0;
@@ -98,7 +91,8 @@ const {
   <body>
     <Header />
     <main>
-      <article>
+      <div class="mask"></div>
+      <article class="width">
         <div class="hero-image">
           {
             heroImage && (

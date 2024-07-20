@@ -1,15 +1,133 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const allblogs = (await getCollection("blog"))
+
+const recentBlog = allblogs.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+).slice(0, 10);
+
+const recentUpdateBlog = allblogs.sort(
+  (a, b) => {
+	let bDate = b.data.updatedDate || b.data.pubDate;
+	let aDate = a.data.updatedDate || a.data.pubDate;
+	return bDate.valueOf() - aDate.valueOf();
+  }
+).slice(0, 5);
+
+const uniqueTags = [
+  ...new Set(allblogs.map((post) => post.data.tags || []).flat()),
+];
+
+
 ---
 
 <BaseLayout>
-<div>
-	<div>最近更新的文章</div>
-	<div class="right">、
-		标签
-
-		推荐阅读
-	</div>
-</div>
+  <div class="body">
+    <div class="top"></div>
+    <div class="content">
+      <div class="mask"></div>
+      <div class="list">
+        <div class="left">
+			<h3>最近更新的文章</h3>
+			<div>
+				{recentBlog && recentBlog.map(blog => (
+					<div class="post">
+						<div>
+							<a href={`/blog/${blog.slug}`}>{blog.data.title}</a>
+						</div>
+						<div>介绍</div>
+						<div><a href={`/blog/${blog.slug}`}>{"阅读更多 ->>> "}</a></div>
+					</div>
+				))}
+			</div>
+		</div>
+        <div class="right">
+			<div class="fixed">
+				<div class="tags">
+					{uniqueTags && uniqueTags.map(tag => (
+						<div class="tag">
+							<a href={`/tags/${tag}`}>#{tag}</a>
+						</div>
+					))}
+				</div>
+				<div class="recentUpdateBlog">
+					<h4>最近更新的文章</h4>
+					<ul>
+						{recentUpdateBlog && recentUpdateBlog.map(blog => (
+							<li class="post">
+								<a href={`/blog/${blog.slug}`}>{blog.data.title}</a>
+							</li>
+						))}
+					</ul>
+				</div>
+				<div>推荐阅读</div>
+				<div>最受欢迎的文章</div>
+			</div>
+		</div>
+      </div>
+    </div>
+  </div>
 </BaseLayout>
+<style>
+  .top {
+    background-color: var(--theme-bg);
+    height: 50vh;
+  }
+  .body {
+    padding: 0;
+    margin: 0;
+  }
+  .content {
+  }
+  .content .list {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 1000px;
+    margin: 0 auto;
+  }
+  @media (min-width: 1200px) {
+    .content .list {
+      width: 1000px;
+    }
+  }
+  @media (max-width: 1200px) and (min-width: 900px) {
+    .content .list {
+      width: 800px;
+    }
+  }
+  @media (max-width: 900px) {
+    .content .list {
+      width: 100%;
+    }
+  }
+  .content .list .left {
+    flex: 7;
+  }
+  .content .list .right {
+    flex: 3;
+  }
+  .post {
+	margin-bottom: 20px;
+  }
+  .right .fixed {
+	position: sticky;
+	top: 70px;
+	right: 0;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+	margin-bottom: 20px;
+  }
 
+  .tag {
+    margin: 0.25em;
+    border: dotted 1px var(--theme);
+    border-radius: 0.5em;
+    padding: 5px 10px;
+    background-color: var(--theme-bg);
+  }
+</style>
