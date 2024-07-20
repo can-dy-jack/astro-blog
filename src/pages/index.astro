@@ -2,70 +2,79 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const allblogs = (await getCollection("blog"))
+const allblogs = await getCollection("blog");
 
-const recentBlog = allblogs.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-).slice(0, 10);
+const recentBlog = allblogs
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 10);
 
-const recentUpdateBlog = allblogs.sort(
-  (a, b) => {
-	let bDate = b.data.updatedDate || b.data.pubDate;
-	let aDate = a.data.updatedDate || a.data.pubDate;
-	return bDate.valueOf() - aDate.valueOf();
-  }
-).slice(0, 5);
+const recentUpdateBlog = allblogs
+  .sort((a, b) => {
+    let bDate = b.data.updatedDate || b.data.pubDate;
+    let aDate = a.data.updatedDate || a.data.pubDate;
+    return bDate.valueOf() - aDate.valueOf();
+  })
+  .slice(0, 5);
 
 const uniqueTags = [
   ...new Set(allblogs.map((post) => post.data.tags || []).flat()),
 ];
-
-
 ---
 
-<BaseLayout>
+<BaseLayout hasMask={false}>
   <div class="body">
-    <div class="top"></div>
+    <div class="top fancy-bg"></div>
     <div class="content">
       <div class="mask"></div>
       <div class="list">
         <div class="left">
-			<h3>最近更新的文章</h3>
-			<div>
-				{recentBlog && recentBlog.map(blog => (
-					<div class="post">
-						<div>
-							<a href={`/blog/${blog.slug}`}>{blog.data.title}</a>
-						</div>
-						<div>介绍</div>
-						<div><a href={`/blog/${blog.slug}`}>{"阅读更多 ->>> "}</a></div>
-					</div>
-				))}
-			</div>
-		</div>
+          <h3>最近更新的文章</h3>
+          <div>
+            {
+              recentBlog &&
+                recentBlog.map((blog) => (
+                  <div class="post">
+                    <div>
+                      <a href={`/blog/${blog.slug}`}>{blog.data.title}</a>
+                    </div>
+                    <div>介绍</div>
+                    <div>
+                      <a href={`/blog/${blog.slug}`}>{"阅读更多 ->>> "}</a>
+                    </div>
+                  </div>
+                ))
+            }
+          </div>
+        </div>
         <div class="right">
-			<div class="fixed">
-				<div class="tags">
-					{uniqueTags && uniqueTags.map(tag => (
-						<div class="tag">
-							<a href={`/tags/${tag}`}>#{tag}</a>
-						</div>
-					))}
-				</div>
-				<div class="recentUpdateBlog">
-					<h4>最近更新的文章</h4>
-					<ul>
-						{recentUpdateBlog && recentUpdateBlog.map(blog => (
-							<li class="post">
-								<a href={`/blog/${blog.slug}`}>{blog.data.title}</a>
-							</li>
-						))}
-					</ul>
-				</div>
-				<div>推荐阅读</div>
-				<div>最受欢迎的文章</div>
-			</div>
-		</div>
+          <div class="fixed">
+            <div class="tags">
+              {
+                uniqueTags &&
+                  uniqueTags.map((tag) => (
+                    <div class="tag">
+                      <a href={`/tags/${tag}`}>#{tag}</a>
+                    </div>
+                  ))
+              }
+            </div>
+            <div class="recentUpdateBlog">
+              <h4>最近更新的文章</h4>
+              <ul class="posts">
+                {
+                  recentUpdateBlog &&
+                    recentUpdateBlog.map((blog) => (
+                      <li class="post">
+                        <a href={`/blog/${blog.slug}`}>{blog.data.title}</a>
+                      </li>
+                    ))
+                }
+              </ul>
+            </div>
+            <div>推荐阅读</div>
+            <div>最受欢迎的文章</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -74,12 +83,38 @@ const uniqueTags = [
   .top {
     background-color: var(--theme-bg);
     height: 50vh;
+    /* background: repeating-linear-gradient(45deg, transparent, transparent 20px, var(--theme-bg) 20px, var(--theme-bg) 40px); */
   }
+  .fancy-bg {
+    --s: 200px; /* control the size */
+    --c1: #febec1;
+    --c2: #fdd1d4;
+    --c3: #fde8e8;
+
+    background:
+      repeating-conic-gradient(from 30deg, #0000 0 120deg, var(--c3) 0 180deg)
+        calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+      repeating-conic-gradient(
+        from 30deg,
+        var(--c1) 0 60deg,
+        var(--c2) 0 120deg,
+        var(--c3) 0 180deg
+      );
+    background-size: var(--s) calc(var(--s) * 0.577);
+  }
+  :global(.dark) .fancy-bg {
+    --c1: #7a5c5d;
+    --c2: #776465;
+    --c3: #786d6d;
+  }
+
   .body {
     padding: 0;
     margin: 0;
   }
   .content {
+    padding: 20px;
+    box-sizing: border-box;
   }
   .content .list {
     display: flex;
@@ -109,18 +144,22 @@ const uniqueTags = [
   .content .list .right {
     flex: 3;
   }
+  .posts {
+	padding-left: 20px;
+  }
   .post {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
+	list-style-type: "> ";
   }
   .right .fixed {
-	position: sticky;
-	top: 70px;
-	right: 0;
+    position: sticky;
+    top: 70px;
+    right: 0;
   }
   .tags {
     display: flex;
     flex-wrap: wrap;
-	margin-bottom: 20px;
+    margin-bottom: 20px;
   }
 
   .tag {

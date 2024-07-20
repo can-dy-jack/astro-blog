@@ -4,7 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { ViewTransitions } from "astro:transitions";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-const { title, des } = Astro.props;
+const { title, des, hasMask = true } = Astro.props;
 
 const titleStr = title ? SITE_TITLE + " | " + title : title;
 const desStr = des ? SITE_DESCRIPTION + " | " + des : SITE_DESCRIPTION;
@@ -89,7 +89,7 @@ const desStr = des ? SITE_DESCRIPTION + " | " + des : SITE_DESCRIPTION;
     <Header />
 	
     <main>
-      <div class="mask"></div>
+      {hasMask ? <div class="mask"></div> : ""}
       <slot />
     </main>
     <Footer />

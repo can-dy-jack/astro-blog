@@ -4,6 +4,7 @@
   --theme-bg: rgba(255, 159, 164, 0.1);
   --gray: 96, 115, 159;
   --bg: #fff;
+  --bg-op10: rgba(255, 255, 255, 0.1);
   --color: #233;
 
   --accent: #2337ff;
@@ -21,7 +22,8 @@ html {
   color-scheme: light;
 }
 html.dark {
-  --bg: rgb(14, 28, 28);
+  --bg: rgb(34, 34, 34);
+  --bg-op10: rgba(34, 34, 34, 0.1);
   --color: #eee;
   color-scheme: dark;
   --gray-light: 128, 128, 128;
@@ -192,9 +194,6 @@ hr {
   body {
     font-size: 16px;
   }
-  main {
-    padding: 1em;
-  }
 }
 .mask {
   height: 70px;
@@ -203,7 +202,9 @@ hr {
   width: 100%;
   left: 0;
   z-index: 10;
-  background-color: var(--bg);
+  background-color: var(----bg-op10);
+
+  backdrop-filter: saturate(180%) blur(20px);
 }
 
 .sr-only {
@@ -259,4 +260,11 @@ hr {
   .width {
     width: 100%;
   }
+}
+
+.ripple {
+  background: repeating-linear-gradient(
+    45deg, transparent, transparent 20px, 
+    var(--theme-bg) 20px, var(--theme-bg) 40px
+  );
 }
