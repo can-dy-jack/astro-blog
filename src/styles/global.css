@@ -6,6 +6,7 @@
   --bg: #fff;
   --bg-op10: rgba(255, 255, 255, 0.1);
   --color: #233;
+  --main-bg: #fafbfc;
 
   --accent: #2337ff;
   --accent-dark: #000d8a;
@@ -27,6 +28,7 @@ html.dark {
   --color: #eee;
   color-scheme: dark;
   --gray-light: 128, 128, 128;
+  --main-bg: #22262a;
 }
 
 ::view-transition-new(root),
@@ -36,6 +38,12 @@ html.dark {
 }
 .dark::view-transition-old(root) {
   z-index: 100;
+}
+/* 代码块适配黑暗模式 */
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }
 /* .dark::view-transition-new(root) {
   z-index: 100;
@@ -85,6 +93,8 @@ body {
 }
 body main {
   flex: 1;
+
+  background-color: var(--main-bg);
 }
 ::selection {
   background-color: var(--theme);
@@ -101,19 +111,19 @@ h6 {
   scroll-margin-top: 90px;
 }
 h1 {
-  font-size: 3.052em;
+  font-size: 2.5em;
 }
 h2 {
-  font-size: 2.441em;
+  font-size: 2em;
 }
 h3 {
-  font-size: 1.953em;
+  font-size: 1.5em;
 }
 h4 {
-  font-size: 1.563em;
+  font-size: 1.25em;
 }
 h5 {
-  font-size: 1.25em;
+  font-size: 1em;
 }
 strong,
 b {
@@ -260,8 +270,10 @@ hr {
   .width {
     width: 100%;
   }
+  pre {
+    border-radius: 0;
+  }
 }
-
 .ripple {
   background: repeating-linear-gradient(
     45deg, transparent, transparent 20px, 
